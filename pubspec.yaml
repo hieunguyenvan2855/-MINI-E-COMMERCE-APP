@@ -1,0 +1,51 @@
+name: mini_ecommerce_app
+description: "Bài thực hành 4 - Nhóm Flutter - Mini E-commerce App"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0' # Đảm bảo tương thích với Flutter mới nhất
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # --- QUẢN LÝ TRẠNG THÁI (STATE MANAGEMENT) ---
+  # Bắt buộc để làm logic Giỏ hàng & tính tiền realtime
+  provider: ^6.1.1
+
+  # --- GIAO DIỆN & UI UX ---
+  # Làm banner quảng cáo tự động chạy
+  carousel_slider: ^5.0.0
+  # Hiệu ứng Grid kiểu Shopee (ảnh cao thấp khác nhau)
+  flutter_staggered_grid_view: ^0.7.0
+  # Làm dấu chấm chấm (indicator) cho Banner
+  smooth_page_indicator: ^1.1.0
+  # Hiển thị số lượng sản phẩm trên icon Giỏ hàng (Badge)
+  badges: ^3.1.2
+  # Load ảnh từ internet mượt mà và có hiệu ứng chờ (loading)
+  cached_network_image: ^3.3.0
+  # Các icon đẹp hơn (tùy chọn)
+  font_awesome_flutter: ^10.7.0
+
+  # --- LOGIC & DỮ LIỆU ---
+  # Gọi API từ FakeStore
+  http: ^1.1.0
+  # Định dạng tiền tệ VNĐ (Ví dụ: 150.000đ) và ngày tháng
+  intl: ^0.19.0
+  # Lưu giỏ hàng xuống bộ nhớ máy (Điểm cộng: Data Persistence)
+  shared_preferences: ^2.2.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+
+  # Nếu nhóm có dùng ảnh logo hay banner offline thì khai báo ở đây
+  # assets:
+  #   - assets/images/logo.png
+  #   - assets/banners/
