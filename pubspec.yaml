@@ -38,6 +38,7 @@ dependencies:
   intl: ^0.19.0
   # Lưu giỏ hàng xuống bộ nhớ máy (Điểm cộng: Data Persistence)
   shared_preferences: ^2.2.2
+  firebase_core: ^4.5.0
 
 dev_dependencies:
   flutter_test:

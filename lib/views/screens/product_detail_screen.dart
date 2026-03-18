@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:badges/badges.dart' as badge_package;
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import '../../models/product.dart';
 import '../../viewmodels/cart_provider.dart';
 
@@ -297,7 +298,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   Row(
                     children: [
                       Text(
-                        '\$${widget.product.price}',
+                        '₫${NumberFormat('#,##0', 'vi_VN').format((widget.product.price * 24000).toInt())}',
                         style: GoogleFonts.poppins(
                             fontSize: 30,
                             fontWeight: FontWeight.bold,
@@ -305,7 +306,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ),
                       const SizedBox(width: 12),
                       Text(
-                        '\$${(widget.product.price * 1.2).toStringAsFixed(2)}',
+                        '₫${NumberFormat('#,##0', 'vi_VN').format((widget.product.price * 1.2 * 24000).toInt())}',
                         style: GoogleFonts.poppins(
                             fontSize: 20,
                             color: Colors.grey,
