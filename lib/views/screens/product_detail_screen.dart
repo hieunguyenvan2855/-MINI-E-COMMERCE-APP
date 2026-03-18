@@ -382,7 +382,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         ),
       ),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
@@ -393,77 +393,95 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 offset: const Offset(0, -4)),
           ],
         ),
-        child: Row(
-          children: [
-            // Left side: Chat and Cart icons
-            Row(
-              children: [
-                Container(
+        child: SafeArea(
+          child: Row(
+            children: [
+              // Left side: Chat and Cart icons
+              Container(
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF8F9AA),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.chat_bubble_outline,
+                      color: Color(0xFF673AB7), size: 20),
+                  constraints: const BoxConstraints(),
+                  padding: EdgeInsets.zero,
+                ),
+              ),
+              const SizedBox(width: 8),
+              badge_package.Badge(
+                badgeContent: Text('$totalItems',
+                    style: const TextStyle(color: Colors.white, fontSize: 10)),
+                child: Container(
+                  padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
                     color: const Color(0xFFF8F9AA),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.chat_bubble_outline,
-                        color: Color(0xFF673AB7)),
+                    onPressed: () => Navigator.pushNamed(context, '/cart'),
+                    icon: const Icon(Icons.shopping_cart_outlined,
+                        color: Color(0xFF673AB7), size: 20),
+                    constraints: const BoxConstraints(),
+                    padding: EdgeInsets.zero,
                   ),
                 ),
-                const SizedBox(width: 8),
-                badge_package.Badge(
-                  badgeContent: Text('$totalItems',
-                      style: const TextStyle(color: Colors.white)),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF8F9AA),
-                      borderRadius: BorderRadius.circular(8),
+              ),
+              const SizedBox(width: 12),
+              // Right side: Buttons
+              Expanded(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: _showVariationsBottomSheet,
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(
+                              color: Color(0xFF673AB7), width: 1.5),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8)),
+                        ),
+                        child: Text(
+                          'Thêm vào giỏ',
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.poppins(
+                              color: const Color(0xFF673AB7),
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ),
                     ),
-                    child: IconButton(
-                      onPressed: () => Navigator.pushNamed(context, '/cart'),
-                      icon: const Icon(Icons.shopping_cart_outlined,
-                          color: Color(0xFF673AB7)),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Logic mua ngay
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF673AB7),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8)),
+                        ),
+                        child: Text(
+                          'Mua ngay',
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.poppins(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
-            const Spacer(),
-            // Right side: Buttons
-            Row(
-              children: [
-                OutlinedButton(
-                  onPressed: _showVariationsBottomSheet,
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Color(0xFF673AB7), width: 2),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 24, vertical: 16),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                  ),
-                  child: Text('Thêm vào giỏ',
-                      style: GoogleFonts.poppins(
-                          color: const Color(0xFF673AB7),
-                          fontWeight: FontWeight.w600)),
-                ),
-                const SizedBox(width: 12),
-                ElevatedButton(
-                  onPressed: () {
-                    // Logic mua ngay
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF673AB7),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 24, vertical: 16),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                  ),
-                  child: Text('Mua ngay',
-                      style: GoogleFonts.poppins(
-                          color: Colors.white, fontWeight: FontWeight.w600)),
-                ),
-              ],
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );
