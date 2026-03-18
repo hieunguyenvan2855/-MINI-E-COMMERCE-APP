@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'viewmodels/cart_provider.dart';
 import 'views/screens/home_screen.dart';
 import 'views/screens/cart_screen.dart';
+import 'views/screens/product_detail_screen.dart';
+import 'models/product.dart';
 
 void main() {
   runApp(
@@ -24,11 +27,16 @@ class MyApp extends StatelessWidget {
       title: 'Mini E-Commerce App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.orange,
+        primaryColor: const Color(0xFF673AB7),
+        colorScheme: const ColorScheme.light(
+          primary: Color(0xFF673AB7),
+          secondary: Color(0xFFFFC107),
+        ),
+        scaffoldBackgroundColor: const Color(0xFFF8F9AA),
         useMaterial3: true,
-        scaffoldBackgroundColor: const Color(0xFFF5F5F5),
+        textTheme: GoogleFonts.poppinsTextTheme(),
         appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.orange,
+          backgroundColor: Color(0xFF673AB7),
           foregroundColor: Colors.white,
           elevation: 0,
         ),
@@ -37,6 +45,9 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const HomeScreen(),
         '/cart': (context) => const CartScreen(),
+        '/product_detail': (context) => ProductDetailScreen(
+              product: ModalRoute.of(context)!.settings.arguments as Product,
+            ),
       },
     );
   }

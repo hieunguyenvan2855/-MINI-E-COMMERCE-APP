@@ -1,11 +1,11 @@
 name: mini_ecommerce_app
 description: "Bài thực hành 4 - Nhóm Flutter - Mini E-commerce App"
-publish_to: 'none'
+publish_to: "none"
 
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.0 <4.0.0' # Đảm bảo tương thích với Flutter mới nhất
+  sdk: ">=3.0.0 <4.0.0" # Đảm bảo tương thích với Flutter mới nhất
 
 dependencies:
   flutter:
@@ -28,6 +28,8 @@ dependencies:
   cached_network_image: ^3.3.0
   # Các icon đẹp hơn (tùy chọn)
   font_awesome_flutter: ^10.7.0
+  # Font chữ Poppins
+  google_fonts: ^6.1.0
 
   # --- LOGIC & DỮ LIỆU ---
   # Gọi API từ FakeStore

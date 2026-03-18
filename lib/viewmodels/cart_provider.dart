@@ -4,8 +4,15 @@ import '../models/product.dart';
 class CartItem {
   final Product product;
   int quantity;
+  String? size;
+  String? color;
 
-  CartItem({required this.product, this.quantity = 1});
+  CartItem({
+    required this.product,
+    this.quantity = 1,
+    this.size,
+    this.color,
+  });
 }
 
 class CartProvider with ChangeNotifier {
@@ -20,6 +27,22 @@ class CartProvider with ChangeNotifier {
       _items[product.id]!.quantity += 1;
     } else {
       _items[product.id] = CartItem(product: product);
+    }
+    notifyListeners();
+  }
+
+  void addItemWithVariations(
+      Product product, int quantity, String? size, String? color) {
+    final key = '${product.id}_${size ?? ''}_${color ?? ''}';
+    if (_items.containsKey(key.hashCode)) {
+      _items[key.hashCode]!.quantity += quantity;
+    } else {
+      _items[key.hashCode] = CartItem(
+        product: product,
+        quantity: quantity,
+        size: size,
+        color: color,
+      );
     }
     notifyListeners();
   }
