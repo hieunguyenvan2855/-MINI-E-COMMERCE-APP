@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../../viewmodels/cart_provider.dart';
-import 'checkout_screen.dart'; // Chú ý: Đảm bảo import file Thanh toán mà bạn vừa làm
+import 'checkout_screen.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
@@ -16,9 +16,6 @@ class CartScreen extends StatelessWidget {
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
         title: const Text('Giỏ hàng'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 1,
       ),
       body: cart.items.isEmpty
           ? const Center(child: Text('Giỏ hàng trống'))
@@ -29,61 +26,78 @@ class CartScreen extends StatelessWidget {
                     itemCount: cart.items.length,
                     itemBuilder: (context, index) {
                       final item = cart.items.values.toList()[index];
-                      final productId = cart.items.keys.toList()[index];
+                      final itemKey = cart.items.keys.toList()[index];
+
+                      String variationText = '';
+                      if (item.color != null && item.size != null) {
+                        variationText =
+                            'Màu: ${item.color}, Size: ${item.size}';
+                      } else if (item.color != null) {
+                        variationText = 'Màu: ${item.color}';
+                      } else if (item.size != null) {
+                        variationText = 'Size: ${item.size}';
+                      }
 
                       return Card(
                         margin: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
+                            horizontal: 8, vertical: 4),
                         color: Colors.white,
                         child: ListTile(
-                          contentPadding: const EdgeInsets.only(
-                            right: 12,
-                          ), // Thu gọn padding
-                          // 1. Gắn CHECKBOX vào trước hình ảnh sản phẩm
+                          contentPadding: const EdgeInsets.only(right: 12),
                           leading: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Checkbox(
-                                value: item.isChecked,
-                                activeColor: Colors.orange,
+                                value:
+                                    item.isSelected, // ĐÃ ĐỔI THÀNH isSelected
+                                activeColor: Theme.of(context).primaryColor,
                                 onChanged: (value) {
-                                  cart.toggleCheck(productId);
+                                  cart.toggleItemSelection(itemKey); // ĐÃ ĐỔI
                                 },
                               ),
-                              Image.network(
-                                item.product.image,
-                                width: 50,
-                                fit: BoxFit.contain,
-                              ),
+                              Image.network(item.product.image,
+                                  width: 50, fit: BoxFit.contain),
                             ],
                           ),
-                          title: Text(
-                            item.product.title,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          subtitle: Text(
-                            currencyFormat.format(item.product.price * 24000),
-                            style: const TextStyle(
-                              color: Colors.orange,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          title: Text(item.product.title,
+                              maxLines: 1, overflow: TextOverflow.ellipsis),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (variationText.isNotEmpty)
+                                Text(variationText,
+                                    style: const TextStyle(
+                                        fontSize: 12, color: Colors.grey)),
+                              Text(
+                                  currencyFormat.format(
+                                      item.product.price * 24000),
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                      fontWeight: FontWeight.bold)),
+                            ],
                           ),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text(
-                                'x${item.quantity}',
-                                style: const TextStyle(fontSize: 14),
-                              ),
                               IconButton(
-                                icon: const Icon(
-                                  Icons.delete,
-                                  color: Colors.red,
-                                ),
-                                onPressed: () => cart.removeItem(productId),
+                                icon: const Icon(Icons.remove_circle_outline,
+                                    size: 20),
+                                onPressed: () {
+                                  cart.updateQuantity(
+                                      itemKey, item.quantity - 1);
+                                },
+                              ),
+                              Text('${item.quantity}',
+                                  style: const TextStyle(fontSize: 14)),
+                              IconButton(
+                                icon: const Icon(Icons.add_circle_outline,
+                                    size: 20),
+                                onPressed: () {
+                                  cart.updateQuantity(
+                                      itemKey, item.quantity + 1);
+                                },
                               ),
                             ],
                           ),
@@ -93,50 +107,40 @@ class CartScreen extends StatelessWidget {
                   ),
                 ),
 
-                // --- KHỐI TỔNG TIỀN VÀ ĐẶT HÀNG Ở DƯỚI ĐÁY ---
+                // KHỐI TỔNG TIỀN & MUA HÀNG
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 12,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 4,
-                        offset: const Offset(0, -2),
-                      ),
-                    ],
-                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 4,
+                            offset: Offset(0, -2))
+                      ]),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Row(
                         children: [
-                          // 2. CHECKBOX CHỌN TẤT CẢ
                           Checkbox(
-                            value: cart.isAllChecked,
-                            activeColor: Colors.orange,
+                            value: cart.selectAll, // ĐÃ ĐỔI
+                            activeColor: Theme.of(context).primaryColor,
                             onChanged: (value) {
-                              cart.toggleCheckAll();
+                              cart.toggleSelectAll(value ?? false); // ĐÃ ĐỔI
                             },
                           ),
                           const Text('Tất cả'),
                           const Spacer(),
-                          const Text(
-                            'Tổng cộng: ',
-                            style: TextStyle(fontSize: 16),
-                          ),
+                          const Text('Tổng cộng: ',
+                              style: TextStyle(fontSize: 16)),
                           Text(
-                            currencyFormat.format(
-                              cart.totalAmount * 24000,
-                            ), // Sẽ tự động nhảy theo các sản phẩm được tick
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.orange,
-                            ),
+                            currencyFormat.format(cart.totalAmount * 24000),
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).colorScheme.secondary),
                           ),
                         ],
                       ),
@@ -144,15 +148,13 @@ class CartScreen extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: ElevatedButton(
-                          // Nút sẽ bị khóa (mờ đi) nếu không có sản phẩm nào được tick
-                          onPressed: cart.checkedItems.isEmpty
+                          onPressed: cart.selectedItemCount == 0
                               ? null
                               : () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => CheckoutScreen(
-                                        // Truyền đúng danh sách "checkedItems" thay vì truyền hết
                                         cartItems: cart.checkedItems,
                                         totalAmount: cart.totalAmount,
                                       ),
@@ -160,17 +162,14 @@ class CartScreen extends StatelessWidget {
                                   );
                                 },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.orange,
+                            backgroundColor: Theme.of(context).primaryColor,
                             disabledBackgroundColor: Colors.grey.shade300,
                             minimumSize: const Size(double.infinity, 45),
                           ),
-                          child: Text(
-                            'MUA HÀNG (${cart.checkedItems.length})',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          child: Text('MUA HÀNG (${cart.selectedItemCount})',
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold)),
                         ),
                       ),
                     ],
