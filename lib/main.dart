@@ -26,19 +26,22 @@ class MyApp extends StatelessWidget {
       title: 'Mini E-Commerce',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: const Color(0xFF673AB7), // Tím chủ đạo của nhóm
+        primaryColor: Colors.orange, // Đã đổi sang Cam chủ đạo
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF673AB7),
-          secondary: const Color(0xFFFFC107), // Vàng
+          seedColor: Colors.orange,
+          primary: Colors.orange,
+          secondary: Colors.orangeAccent,
         ),
-        // Đã gỡ bỏ GoogleFonts để không bị lỗi thư viện
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.orange,
+          foregroundColor: Colors.white,
+        ),
       ),
       initialRoute: '/',
       routes: {
         '/': (context) => const HomeScreen(),
         '/cart': (context) => const CartScreen(),
         '/order_history': (context) => const OrderHistoryScreen(),
-        // product_detail handled in onGenerateRoute to accept arguments
       },
       onGenerateRoute: (settings) {
         if (settings.name == '/product_detail') {
